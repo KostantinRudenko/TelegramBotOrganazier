@@ -10,6 +10,10 @@ class Bot:
         @self.bot.message_handler(commands=['start'])
         def start_handler(message):
             self.welcome_func(message)
+
+        @self.bot.message_handler(commands=['help'])
+        def print_help_message(message):
+            self.send_help(message)
         
         @self.bot.message_handler(commands=['take_frog'])
         def send_frog_picture(message):
@@ -18,6 +22,8 @@ class Bot:
         @self.bot.message_handler(commands=['get_time'])
         def get_time(message):
             self.returning_time(message)
+
+
 
     def welcome_func(self, message):
         self.bot.send_message(message.chat.id, 
@@ -36,6 +42,11 @@ class Bot:
         self.bot.send_message(message.chat.id,
                               time,
                               parse_mode=HTML)
+    
+    def send_help(self, message):
+        self.bot.send_message(message.chat.id,
+                            HELP_MESSAGE,
+                            parse_mode=HTML)
     
     def run(self):
         self.bot.polling(none_stop = True)
