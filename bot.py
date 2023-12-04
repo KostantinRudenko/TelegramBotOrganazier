@@ -6,6 +6,7 @@ class Bot:
     def __init__(self) -> None:
         self.bot = telebot.TeleBot(TOKEN)
         self.eng = Engine()
+        self.pgo = PageObject()
 
         @self.bot.message_handler(commands=['start'])
         def start_handler(message):
@@ -22,7 +23,9 @@ class Bot:
         @self.bot.message_handler(commands=['get_time'])
         def get_time(message):
             self.returning_time(message)
-
+        @self.bot.message_handler(commands=["get_courses"])
+        def get_courses(message):
+            self.currency_courses(message)
 
 
     def welcome_func(self, message):
@@ -47,6 +50,10 @@ class Bot:
         self.bot.send_message(message.chat.id,
                             HELP_MESSAGE,
                             parse_mode=HTML)
-    
+    def currency_courses(self, message):
+        courses = self.currency_courses()
+        self.bot.send_message(message.chat.id,
+                              f"Courses of Currencies:\n1 Dollar - {courses[0]}hrivnas.\n1 Euro - {courses[1]}hrivnas.",
+                              parse_mode=HTML)
     def run(self):
         self.bot.polling(none_stop = True)
