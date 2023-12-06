@@ -4,23 +4,32 @@ from config import *
 
 class Bot:
     def __init__(self):
-        bot = telebot.TeleBot(TOKEN)
-        
+        self.bot = telebot.TeleBot(TOKEN)
+        self.command_handlers = {'start' : self.welcome_func,
+                                 'take_frog' : self.send_frog_func}
+        self.setup_handlers()
+    '''
+        Method setup_handlers is a function, 
+        which is handle & manage every bot command.
+    '''
+    def setup_handlers(self):
+        @self.bot.message_handler(func=lambda message: True)
+        def handle_messages(message):
+            command = message.text.split()[0][1:]
+            if command in self.command_handlers:
+                self.command_handlers[command](message)
+            else:
+                self.bot.reply_to(message, f"{UNKNOWN_MESSAGE} {command}")
 
-    @self.bot.message_handler(commands=['start'],
-                         func=lambda message: True)
     def welcome_func(self, message):
-         self.bot.reply_to(message, 
-                               WILLKOMMEN_MESSAGE,
-                               parse_mode = HTML)
-         
-    @self.bot.message_handler(commands=['take_frog'],
-                         func=lambda message: True)
-    def send_frog(self, message):
-        self.bot.reply_to(message, 
-                             'Держи жабу.',
-                              parse_mode = HTML)
-        photo = open(PHOTO_NAME, PHOTO_MODE)
-        self.bot.send_photo(message, photo)
-    
-    bot.polling(none_stop = True)
+        self.bot.reply_to(message, WILLKOMMEN_MESSAGE)
+
+    def send_frog_func(self, message):
+        chat_id = message.id
+        photo = open(PHOTO_NAME_PATH, PHOTO_MODE)
+        self.bot.reply_to(message, TAKE_FROG_MESSAGE)
+        self.bot.send_photo(chat_id = chat_id, 
+                            photo=photo)
+
+    def start_polling(self):
+        self.bot.polling(none_stop = True)
