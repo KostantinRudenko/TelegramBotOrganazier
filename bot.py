@@ -3,50 +3,33 @@ import telebot
 from config import *
 from engine import *
 class Bot:
-    def __init__(self) -> None:
+    def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
-        self.eng = Engine()
-
-        @self.bot.message_handler(commands=['start'])
-        def start_handler(message):
-            self.welcome_func(message)
-
-        @self.bot.message_handler(commands=['help'])
-        def print_help_message(message):
-            self.send_help(message)
-        
-        @self.bot.message_handler(commands=['take_frog'])
-        def send_frog_picture(message):
-            self.send_frog(message)
-        
-        @self.bot.message_handler(commands=['get_time'])
-        def get_time(message):
-            self.returning_time(message)
-
-
+        self.command_handlers = {START : self.welcome_func,
+                                 SEND_FROG : self.send_frog_func}
+        self.setup_handlers()
+    '''
+        Method setup_handlers is a function, 
+        which is handle & manage every bot command.
+    '''
+    def setup_handlers(self):
+        @self.bot.message_handler(func=lambda message: True)
+        def handle_messages(message):
+            command = message.text.split()[0][1:]
+            if command in self.command_handlers:
+                self.command_handlers[command](message)
+            else:
+                self.bot.reply_to(message, f"{UNKNOWN_MESSAGE} {command}")
 
     def welcome_func(self, message):
-        self.bot.send_message(message.chat.id, 
-                            WILLKOMMEN_MESSAGE,
-                            parse_mode = HTML)
+        self.bot.reply_to(message, WILLKOMMEN_MESSAGE)
 
-    def send_frog(self, message):
-        self.bot.send_message(message.chat.id, 
-                               'Держи жабу.',
-                               parse_mode = HTML)
-        photo = open(PHOTO_NAME, PHOTO_MODE)
-        self.bot.send_photo(message.chat.id, photo)
+    def send_frog_func(self, message):
+        chat_id = message.id
+        photo = open(PHOTO_NAME_PATH, PHOTO_MODE)
+        self.bot.reply_to(message, TAKE_FROG_MESSAGE)
+        self.bot.send_photo(chat_id = chat_id, 
+                            photo=photo)
 
-    def returning_time(self, message):
-        time = self.eng.get_time()
-        self.bot.send_message(message.chat.id,
-                              time,
-                              parse_mode=HTML)
-    
-    def send_help(self, message):
-        self.bot.send_message(message.chat.id,
-                            HELP_MESSAGE,
-                            parse_mode=HTML)
-    
-    def run(self):
+    def start_polling(self):
         self.bot.polling(none_stop = True)
