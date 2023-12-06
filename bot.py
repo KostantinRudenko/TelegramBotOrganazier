@@ -5,8 +5,8 @@ from config import *
 class Bot:
     def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
-        self.command_handlers = {'start' : self.welcome_func,
-                                 'take_frog' : self.send_frog_func}
+        self.command_handlers = {START : self.welcome_func,
+                                 SEND_FROG : self.send_frog_func}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
