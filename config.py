@@ -13,6 +13,7 @@ HTML = 'html'
 ### COMMANDS ###
 START = 'start'
 SEND_FROG = 'take_frog'
+GET_TIME = 'get_time'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_NAME_PATH = 'frog.jpg'

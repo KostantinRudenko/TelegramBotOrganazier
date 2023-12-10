@@ -5,8 +5,10 @@ from engine import *
 class Bot:
     def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
+        self.eng = Engine()
         self.command_handlers = {START : self.welcome_func,
-                                 SEND_FROG : self.send_frog_func}
+                                 SEND_FROG : self.send_frog_func,
+                                 GET_TIME : self.send_time}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -30,6 +32,11 @@ class Bot:
         self.bot.reply_to(message, TAKE_FROG_MESSAGE)
         self.bot.send_photo(chat_id = chat_id, 
                             photo=photo)
+    
+    def send_time(self, message):
+        self.bot.send_message(message.chat.id,
+                              self.eng.get_time(),
+                              parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
