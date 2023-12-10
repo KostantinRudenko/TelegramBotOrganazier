@@ -37,6 +37,9 @@ class Bot:
         self.bot.send_message(message.chat.id,
                               self.eng.get_time(),
                               parse_mode=HTML)
+    
+    def set_timer(self, message):
+        pass
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
