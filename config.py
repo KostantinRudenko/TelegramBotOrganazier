@@ -14,7 +14,7 @@ HTML = 'html'
 START = 'start'
 SEND_FROG = 'take_frog'
 GET_TIME = 'get_time'
-READ_DATA = 'read_data'
+START_TIME = 'start_time'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_NAME_PATH = 'frog.jpg'

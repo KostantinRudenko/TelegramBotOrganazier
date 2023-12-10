@@ -1,14 +1,18 @@
 import telebot
+import time
 
 from config import *
+from regex_reader import *
 from engine import *
 class Bot:
     def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
         self.eng = Engine()
+        self.rgx = RegexReader()
         self.command_handlers = {START : self.welcome_func,
                                  SEND_FROG : self.send_frog_func,
-                                 GET_TIME : self.send_time}
+                                 GET_TIME : self.send_time,
+                                 START_TIME : self.set_timer}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -39,7 +43,18 @@ class Bot:
                               parse_mode=HTML)
     
     def set_timer(self, message):
-        pass
+        self.bot.send_message(message.chat.id,
+                              "Введите время.\nЧас:минута\nУ тебя 10 секунд. Дерзай!",
+                              parse_mode=HTML)
+        time.sleep(10)
+        user_message = message.text.strip()
+        time_now = self.rgx.read_data(r"\d+:\d+", user_message)
+        if time_now:
+            self.eng.start_timer(time_now)
+        else:
+            self.bot.send_message(message.chat.id,
+                                  "Я сказал, введи время по шаблону Час:Минута!",
+                                  parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
