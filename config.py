@@ -1,5 +1,5 @@
 ### TOKEN ###
-TOKEN = 'token here'
+TOKEN = '6738931633:AAEEMJPocK-NsUm4NeBr1JOZvKnVqlpLnKQ'
 
 ### MESSAGES ###
 WILLKOMMEN_MESSAGE = "Привет, сладкий. Я твоя горечь!"
@@ -14,6 +14,7 @@ HTML = 'html'
 START = 'start'
 SEND_FROG = 'take_frog'
 GET_TIME = 'get_time'
+READ_DATA = 'read_data'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_NAME_PATH = 'frog.jpg'
