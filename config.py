@@ -1,11 +1,13 @@
 ### TOKEN ###
-TOKEN = '6738931633:AAEEMJPocK-NsUm4NeBr1JOZvKnVqlpLnKQ'
+TOKEN = ''
 
 ### MESSAGES ###
 WILLKOMMEN_MESSAGE = "Привет, сладкий. Я твоя горечь!"
 HELP_MESSAGE = "Bot command:\n/take_frog - send message and meme about frog.\n/get_time - send time in East and Wesst style"
 UNKNOWN_MESSAGE = 'Дядя, я эту команду не знаю:'
 TAKE_FROG_MESSAGE = 'Держи жабу.'
+STOP_TIMER_MESSAGE = "Пора на Донбасс!"
+WRONG_COMMAND_MESSAGE = "Неправильное написание комманды, переделуй!"
 
 ### FORMATS ###
 HTML = 'html'
@@ -14,7 +16,7 @@ HTML = 'html'
 START = 'start'
 SEND_FROG = 'take_frog'
 GET_TIME = 'get_time'
-START_TIME = 'start_time'
+START_TIME = 'timer'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_NAME_PATH = 'frog.jpg'

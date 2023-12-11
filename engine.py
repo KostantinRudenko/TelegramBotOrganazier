@@ -1,5 +1,6 @@
 import datetime
 import time
+import requests
 
 from config import *
 
@@ -9,18 +10,14 @@ class Engine:
         pass
 
     def get_time(self):
-        '''
-        gets time
-        '''
-        date_data = datetime.datetime.now()
-        hour_time = date_data.hour
-        
-        if hour_time <= 12:
-            date = f"East:\n\t{date_data.day}-{date_data.month}-{date_data.year}\n\t{date_data.hour}:{date_data.minute}\nWest:\n\t{date_data.month}-{date_data.day}-{date_data.year}\n\t{date_data.hour}:{date_data.minute}a.m."
-        else:
-            date = f"East:\n\t{date_data.day}-{date_data.month}-{date_data.year}\n\t{date_data.hour}:{date_data.minute}\nWest:\n\t{date_data.month}-{date_data.day}-{date_data.year}\n\t{date_data.hour-12}:{date_data.minute}p.m."
-        
+
+        date = self.get_headers("https://www.google.com/")['Date']
         return date
+    
+    def get_hout_minute(self):
+
+        this_time = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
+        return this_time
     
     def start_timer(self, setted_time):
         while True:
@@ -28,4 +25,8 @@ class Engine:
             if setted_time != time_now:
                 pass
             else:
-                return "Пора на Донбасс!"
+                return STOP_TIMER_MESSAGE
+    
+    def get_headers(self, link : str) -> list:
+
+        return requests.get(url=link).headers

@@ -1,5 +1,4 @@
 import telebot
-import time
 
 from config import *
 from regex_reader import *
@@ -42,19 +41,19 @@ class Bot:
                               self.eng.get_time(),
                               parse_mode=HTML)
     
-    def set_timer(self, message):
-        self.bot.send_message(message.chat.id,
-                              "Введите время.\nЧас:минута\nУ тебя 10 секунд. Дерзай!",
-                              parse_mode=HTML)
-        time.sleep(10)
-        user_message = message.text.strip()
-        time_now = self.rgx.read_data(r"\d+:\d+", user_message)
-        if time_now:
-            self.eng.start_timer(time_now)
-        else:
+    def set_timer(self, message) -> str:
+        user_message = message.text.split()
+        try:
+            setted_time = user_message[1]
+            while True:
+                if self.eng.get_hout_minute() == setted_time:
+                    break
             self.bot.send_message(message.chat.id,
-                                  "Я сказал, введи время по шаблону Час:Минута!",
+                                  STOP_TIMER_MESSAGE,
                                   parse_mode=HTML)
+        except IndexError:
+            self.bot.reply_to(message, WRONG_COMMAND_MESSAGE)
+             
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
