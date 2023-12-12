@@ -11,7 +11,8 @@ class Bot:
         self.command_handlers = {START : self.welcome_func,
                                  SEND_FROG : self.send_frog_func,
                                  GET_TIME : self.send_time,
-                                 START_TIME : self.set_timer}
+                                 START_TIME : self.set_timer,
+                                 WEATHER : self.send_weather}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -53,6 +54,11 @@ class Bot:
                                   parse_mode=HTML)
         except IndexError:
             self.bot.reply_to(message, WRONG_COMMAND_MESSAGE)
+        
+    def send_weather(self, message):
+        self.bot.send_message(message.chat.id,
+                              self.eng.get_dnipro_weather(),
+                              parse_mode=HTML)
              
 
     def start_polling(self):

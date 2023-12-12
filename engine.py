@@ -2,12 +2,15 @@ import datetime
 import time
 import requests
 
+from requests import Session
+from lxml import html
 from config import *
 
 class Engine:
     
     def __init__(self) -> None:
-        pass
+        self.session = Session()
+        self.html = html
 
     def get_time(self):
 
@@ -27,6 +30,20 @@ class Engine:
             else:
                 return STOP_TIMER_MESSAGE
     
+    def get_dnipro_weather(self):
+        
+        response = self.session.get(url = WEATHER_LINK)
+        tree = self.html.fromstring(response.content)
+        result = tree.xpath('//*[@id="bd1c"]/div[2]/div[2]/div')
+
+        return result[0].text_content().strip()
+    
     def get_headers(self, link : str) -> list:
 
         return requests.get(url=link).headers
+    
+    def get_content(self, link : str):
+
+        return requests.get(url=link).content
+    
+    
