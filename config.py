@@ -1,5 +1,5 @@
 ### TOKEN ###
-TOKEN = '6738931633:AAEEMJPocK-NsUm4NeBr1JOZvKnVqlpLnKQ'
+TOKEN = ''
 
 ### MESSAGES ###
 WILLKOMMEN_MESSAGE = "Привет, сладкий. Я твоя горечь!"
@@ -19,10 +19,12 @@ GET_TIME = 'get_time'
 MEME = 'meme'
 START_TIME = 'timer'
 WEATHER = 'weather'
+VIDEO_MEME = 'video_meme'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_MODE = 'rb'
 MEME_PATH = './memes'
+VIDEO_PATH = './videos'
 
 ### LINKS ###
 WEATHER_LINK = 'https://ua.sinoptik.ua/%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0-%D0%B4%D0%BD%D1%96%D0%BF%D1%80%D0%BE'

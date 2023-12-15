@@ -18,12 +18,20 @@ class Bot:
                       7 : f'/two_arabs.jpg',
                       8 : f'/i_am_tram.jpg',
                       9 : f'/ilon_musk.jpg'}
+
+        self.video_memes = {0 : f'/people_servant.mp4',
+                            1 : f'/krim_nash.mp4',
+                            2 : f'/goslling_winter.mp4',
+                            3 : f'/tchas_pishov.mp4',
+                            4 : f'/skotinyaka.mp4',
+                            5 : f'/poroshenko.mp4'}
         
         self.command_handlers = {START : self.welcome_func,
                                  SEND_FROG : self.send_frog_func,
                                  GET_TIME : self.send_time,
                                  START_TIME : self.set_timer,
                                  WEATHER : self.send_weather,
+                                 VIDEO_MEME : self.video_meme,
                                  MEME : self.meme}
         self.setup_handlers()
     '''
@@ -72,12 +80,25 @@ class Bot:
         
         meme_number = self.eng.get_random_number(len(self.memes))
         try:
-            path = MEME_PATH+self.memes[meme_number]
+            path = MEME_PATH + self.memes[meme_number]
             photo = open(path, PHOTO_MODE)
         
             self.bot.send_photo(chat_id=chat_id,
                                 photo=photo,
                                 parse_mode=HTML)
+        except KeyError or UnboundLocalError:
+            pass
+    
+    def video_meme(self, message):
+        chat_id = message.chat.id
+        meme_number = self.eng.get_random_number(len(self.video_memes))
+
+        try:
+            video = open(VIDEO_PATH + self.video_memes[meme_number], PHOTO_MODE)
+            self.bot.send_video(chat_id=chat_id,
+                                video=video,
+                                parse_mode=HTML)
+            
         except KeyError or UnboundLocalError:
             pass
         
