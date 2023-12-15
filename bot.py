@@ -8,11 +8,23 @@ class Bot:
         self.bot = telebot.TeleBot(TOKEN)
         self.eng = Engine()
         self.rgx = RegexReader()
+        self.memes = {0 : f'/frog.jpg',
+                      1 : f'/fried_car.jpg',
+                      2 : f'/are_you_still_here.jpg',
+                      3 : f'/bears.jpg',
+                      4 : f'/budanov.jpg',
+                      5 : f'/lake_tank.jpg',
+                      6 : f'/novokuznezk.jpg',
+                      7 : f'/two_arabs.jpg',
+                      8 : f'/i_am_tram.jpg',
+                      9 : f'/ilon_musk.jpg'}
+        
         self.command_handlers = {START : self.welcome_func,
                                  SEND_FROG : self.send_frog_func,
                                  GET_TIME : self.send_time,
                                  START_TIME : self.set_timer,
-                                 WEATHER : self.send_weather}
+                                 WEATHER : self.send_weather,
+                                 MEME : self.meme}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -31,8 +43,8 @@ class Bot:
         self.bot.reply_to(message, WILLKOMMEN_MESSAGE)
 
     def send_frog_func(self, message):
-        chat_id = message.id
-        photo = open(PHOTO_NAME_PATH, PHOTO_MODE)
+        chat_id = message.chat.id
+        photo = open(MEME_PATH+self.memes[0], PHOTO_MODE)
         self.bot.reply_to(message, TAKE_FROG_MESSAGE)
         self.bot.send_photo(chat_id = chat_id, 
                             photo=photo)
@@ -54,12 +66,25 @@ class Bot:
                                   parse_mode=HTML)
         except IndexError:
             self.bot.reply_to(message, WRONG_COMMAND_MESSAGE)
+    
+    def meme(self, message):
+        chat_id = message.chat.id
+        
+        meme_number = self.eng.get_random_number(len(self.memes))
+        try:
+            path = MEME_PATH+self.memes[meme_number]
+            photo = open(path, PHOTO_MODE)
+        
+            self.bot.send_photo(chat_id=chat_id,
+                                photo=photo,
+                                parse_mode=HTML)
+        except KeyError or UnboundLocalError:
+            pass
         
     def send_weather(self, message):
         self.bot.send_message(message.chat.id,
                               self.eng.get_dnipro_weather(),
                               parse_mode=HTML)
-             
 
     def start_polling(self):
         self.bot.polling(none_stop = True)

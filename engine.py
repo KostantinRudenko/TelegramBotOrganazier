@@ -5,6 +5,7 @@ import requests
 from requests import Session
 from lxml import html
 from config import *
+from random import randint
 
 class Engine:
     
@@ -45,5 +46,6 @@ class Engine:
     def get_content(self, link : str):
 
         return requests.get(url=link).content
-    
-    
+
+    def get_random_number(self, limit : int) -> int:
+        return randint(0, limit)
