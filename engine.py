@@ -3,15 +3,15 @@ import time
 import requests
 
 from requests import Session
-from lxml import html
 from config import *
 from random import randint
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 class Engine:
     
     def __init__(self) -> None:
         self.session = Session()
-        self.html = html
 
     def get_time(self):
 
@@ -31,14 +31,26 @@ class Engine:
             else:
                 return STOP_TIMER_MESSAGE
     
-    def get_dnipro_weather(self):
-        
-        response = self.session.get(url = WEATHER_LINK)
-        tree = self.html.fromstring(response.content)
-        result = tree.xpath('//*[@id="bd1c"]/div[2]/div[2]/div')
+    def get_weather(self, city : str):
+        params = {'q' : 'weather in {city}'.format(city=city)}
+        response = self.session.get(url=GOOGLE, params=params)
 
-        return result[0].text_content().strip()
-    
+        driver = webdriver.Chrome(executable_path=CHROME_PATH)
+        driver.get(response.url)
+
+        temp= driver.find_element(By.XPATH, '//*[@id="wob_tm"]').text
+
+        wet = driver.find_element(By.XPATH, '//*[@id="wob_hm"]').text
+
+        rain =driver.find_element(By.XPATH, '//*[@id="wob_pp"]').text
+        
+        if temp and wet and rain:
+
+            result = f'{city}:\nТеспература: {temp}\nВлажность: {wet}\nОсадки: {rain}'
+            return result
+        else:
+            return f'No weather information found for {city}.'
+
     def get_headers(self, link : str) -> list:
 
         return requests.get(url=link).headers

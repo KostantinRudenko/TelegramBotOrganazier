@@ -25,6 +25,7 @@ VIDEO_MEME = 'video_meme'
 PHOTO_MODE = 'rb'
 MEME_PATH = './memes'
 VIDEO_PATH = './videos'
+CHROME_PATH = './chromedriver.exe'
 
 ### LINKS ###
-WEATHER_LINK = 'https://ua.sinoptik.ua/%D0%BF%D0%BE%D0%B3%D0%BE%D0%B4%D0%B0-%D0%B4%D0%BD%D1%96%D0%BF%D1%80%D0%BE'
+GOOGLE = 'https://google.com/search?'

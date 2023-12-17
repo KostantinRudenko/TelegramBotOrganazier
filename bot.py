@@ -103,8 +103,10 @@ class Bot:
             pass
         
     def send_weather(self, message):
+        search_city = message.text.split()[1]
+        res = self.eng.get_weather(city=search_city)
         self.bot.send_message(message.chat.id,
-                              self.eng.get_dnipro_weather(),
+                              res,
                               parse_mode=HTML)
 
     def start_polling(self):
