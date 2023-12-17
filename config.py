@@ -23,8 +23,10 @@ VIDEO_MEME = 'video_meme'
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_MODE = 'rb'
-MEME_PATH = './memes'
-VIDEO_PATH = './videos'
+
+### PATHES ###
+MEME_PATH = './memes/'
+VIDEO_PATH = './videos/'
 CHROME_PATH = './chromedriver.exe'
 
 ### LINKS ###

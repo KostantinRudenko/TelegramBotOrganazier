@@ -8,23 +8,9 @@ class Bot:
         self.bot = telebot.TeleBot(TOKEN)
         self.eng = Engine()
         self.rgx = RegexReader()
-        self.memes = {0 : f'/frog.jpg',
-                      1 : f'/fried_car.jpg',
-                      2 : f'/are_you_still_here.jpg',
-                      3 : f'/bears.jpg',
-                      4 : f'/budanov.jpg',
-                      5 : f'/lake_tank.jpg',
-                      6 : f'/novokuznezk.jpg',
-                      7 : f'/two_arabs.jpg',
-                      8 : f'/i_am_tram.jpg',
-                      9 : f'/ilon_musk.jpg'}
+        self.memes = self.eng.get_file_names(MEME_PATH)
 
-        self.video_memes = {0 : f'/people_servant.mp4',
-                            1 : f'/krim_nash.mp4',
-                            2 : f'/goslling_winter.mp4',
-                            3 : f'/tchas_pishov.mp4',
-                            4 : f'/skotinyaka.mp4',
-                            5 : f'/poroshenko.mp4'}
+        self.video_memes = self.eng.get_file_names(VIDEO_PATH)
         
         self.command_handlers = {START : self.welcome_func,
                                  SEND_FROG : self.send_frog_func,
@@ -78,7 +64,7 @@ class Bot:
     def meme(self, message):
         chat_id = message.chat.id
         
-        meme_number = self.eng.get_random_number(len(self.memes))
+        meme_number = self.eng.get_random_number(len(self.memes)-1)
         try:
             path = MEME_PATH + self.memes[meme_number]
             photo = open(path, PHOTO_MODE)
@@ -91,7 +77,7 @@ class Bot:
     
     def video_meme(self, message):
         chat_id = message.chat.id
-        meme_number = self.eng.get_random_number(len(self.video_memes))
+        meme_number = self.eng.get_random_number(len(self.video_memes)-1)
 
         try:
             video = open(VIDEO_PATH + self.video_memes[meme_number], PHOTO_MODE)
@@ -99,7 +85,7 @@ class Bot:
                                 video=video,
                                 parse_mode=HTML)
             
-        except KeyError or UnboundLocalError:
+        except:
             pass
         
     def send_weather(self, message):

@@ -1,6 +1,7 @@
 import datetime
 import time
 import requests
+import os
 
 from requests import Session
 from config import *
@@ -50,6 +51,9 @@ class Engine:
             return result
         else:
             return f'No weather information found for {city}.'
+    
+    def get_file_names(self, path):
+        return os.listdir(path=path)
 
     def get_headers(self, link : str) -> list:
 
