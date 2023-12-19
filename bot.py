@@ -3,6 +3,7 @@ import telebot
 from config import *
 from regex_reader import *
 from engine import *
+from telebot import types
 class Bot:
     def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
@@ -18,7 +19,10 @@ class Bot:
                                  START_TIME : self.set_timer,
                                  WEATHER : self.send_weather,
                                  VIDEO_MEME : self.video_meme,
-                                 MEME : self.meme}
+                                 MEME : self.meme,
+                                 COURSE : self.get_currency_course,
+                                 DOLLAR : self.get_dollar,
+                                 EURO : self.get_euro}
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -94,6 +98,43 @@ class Bot:
         self.bot.send_message(message.chat.id,
                               res,
                               parse_mode=HTML)
+
+    def get_currency_course(self, message):
+        markup = types.ReplyKeyboardMarkup(row_width=2, selective=False)
+        
+        dollar_btn = types.KeyboardButton('/'+DOLLAR)
+        euro_btn = types.KeyboardButton('/'+EURO)
+        
+        markup.add(dollar_btn, euro_btn)
+        self.bot.send_message(message.chat.id, "Выберите валюту:", reply_markup=markup)
+        '''
+        while True:
+            if message.text == DOLLAR:
+                res = self.eng.get_currency(DOLLAR)
+                self.bot.send_message(message.chat.id,
+                                    res,
+                                    parse_mode=HTML)
+                break
+            
+            elif message.text == EURO:
+                res = self.eng.get_currency(EURO)
+                self.bot.send_message(message.chat.id,
+                                    res,
+                                    parse_mode=HTML)
+                break
+            # сделай так, что б выбор был /get_dollar /get_euro и при этом срабатовала функция
+        '''
+    def get_dollar(self, message):
+        res = self.eng.get_currency(DOLLAR)
+        self.bot.send_message(message.chat.id,
+                            res + "grn",
+                            parse_mode=HTML)
+    
+    def get_euro(self, message):
+        res = self.eng.get_currency(EURO)
+        self.bot.send_message(message.chat.id,
+                            res,
+                            parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)

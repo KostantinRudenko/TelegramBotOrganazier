@@ -35,8 +35,8 @@ class Engine:
     def get_weather(self, city : str):
         params = {'q' : 'weather in {city}'.format(city=city)}
         response = self.session.get(url=GOOGLE, params=params)
-
         driver = webdriver.Chrome(executable_path=CHROME_PATH)
+
         driver.get(response.url)
 
         temp= driver.find_element(By.XPATH, '//*[@id="wob_tm"]').text
@@ -52,6 +52,18 @@ class Engine:
         else:
             return f'No weather information found for {city}.'
     
+    def get_currency(self, currency):
+        params = {'q' : f'{currency}in grn'}
+        response = self.session.get(url=GOOGLE, params=params)
+        driver = webdriver.Chrome(executable_path=CHROME_PATH)
+
+        driver.get(response.url)
+        reusult = driver.find_element(By.XPATH, '//*[@id="knowledge-currency__updatable-data-column"]/div[1]/div[2]/span[1]').text
+        if reusult:
+            return reusult
+        else:
+            return 'There is nothing we can do.'
+        
     def get_file_names(self, path):
         return os.listdir(path=path)
 

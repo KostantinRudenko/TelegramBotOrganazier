@@ -1,5 +1,5 @@
 ### TOKEN ###
-TOKEN = ''
+TOKEN = '6738931633:AAEEMJPocK-NsUm4NeBr1JOZvKnVqlpLnKQ'
 
 ### MESSAGES ###
 WILLKOMMEN_MESSAGE = "Привет, сладкий. Я твоя горечь!"
@@ -20,6 +20,9 @@ MEME = 'meme'
 START_TIME = 'timer'
 WEATHER = 'weather'
 VIDEO_MEME = 'video_meme'
+COURSE = 'course'
+DOLLAR = "dollar"
+EURO = "euro"
 
 ### PHOTOS & PHOTOS OPTIONS ##
 PHOTO_MODE = 'rb'
