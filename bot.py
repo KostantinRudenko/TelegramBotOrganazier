@@ -43,9 +43,15 @@ class Bot:
                     self.command_words[command](message)
                 except:
                     if message.text == CURRENCY_MESSAGE:
+                        """
+                        Check if user decided to know currency course
+                        """
                         self.get_currency_course()
 
                     elif message.text == DOLLAR:
+                        """
+                        Check if user choised dollar as currency
+                        """
                         self.bot.send_message(
                                     message.chat.id,
                                     f"{CURRENCY_ANSWER_MESSAGE} {self.eng.get_currency(DOLLAR)}",
@@ -54,6 +60,9 @@ class Bot:
                         self.send_main_buttons(message=message)
                     
                     elif message.text == EURO:
+                        """
+                        Check if user choised euro as currency
+                        """
                         self.bot.send_message(
                                     message.chat.id,
                                     f"{CURRENCY_ANSWER_MESSAGE} {self.eng.get_currency(EURO)}",
@@ -61,6 +70,9 @@ class Bot:
                         self.send_main_buttons(message=message)
                     
                     elif message.text in CITIES.keys():
+                        """
+                        Check if user try to know weather in a city
+                        """
                         for city in CITIES.keys():
                             if message.text == city:
                                 self.bot.send_message(message.chat.id,
@@ -72,6 +84,9 @@ class Bot:
 
     def welcome_func(self, message):
         
+        """
+        Greets user
+        """
         self.bot.send_message(message.chat.id,
                               WILLKOMMEN_MESSAGE,
                               parse_mode=HTML)
@@ -79,6 +94,9 @@ class Bot:
     
     def send_main_buttons(self, message):
 
+        """
+        Return usual choice of commands(keyboard) to the user
+        """
         markup = types.ReplyKeyboardMarkup(row_width=2)
         meme_button = types.KeyboardButton(MEME_MESSAGE)
         video_meme_button = types.KeyboardButton(VIDEO_MEME_MESSAGE)
@@ -96,6 +114,9 @@ class Bot:
                               parse_mode=HTML)
     
     def get_currency_course(self, message):
+        """
+        Sends user a keyboard with choice of currencies
+        """
 
         markup = types.ReplyKeyboardMarkup(row_width=2)
         dollar_button = types.KeyboardButton(DOLLAR)
@@ -109,6 +130,9 @@ class Bot:
                               reply_markup=markup)
     
     def send_cities(self, message):
+        """
+        Sends user keyboard with choise of ukrainian cities
+        """
         markup = types.ReplyKeyboardMarkup(row_width=3)
 
         for city in CITIES:
@@ -121,6 +145,9 @@ class Bot:
                               parse_mode=HTML)
 
     def send_frog_func(self, message):
+        """
+        Sends frog :)
+        """
         chat_id = message.chat.id
         photo = open(MEME_PATH+self.memes[self.memes.index('frog.jpg')], PHOTO_MODE)
         self.bot.reply_to(message, TAKE_FROG_MESSAGE)
@@ -128,11 +155,17 @@ class Bot:
                             photo=photo)
     
     def send_time(self, message):
+        """
+        Sends current time to user
+        """
         self.bot.send_message(message.chat.id,
                               self.eng.get_time(),
                               parse_mode=HTML)
     
     def meme(self, message):
+        """
+        Sends random meme from folder to user
+        """
         chat_id = message.chat.id
         
         meme_number = self.eng.get_random_number(len(self.memes)-1)
@@ -147,6 +180,9 @@ class Bot:
             pass
     
     def video_meme(self, message):
+        """
+        Sends random video meme from folder to user
+        """
         chat_id = message.chat.id
         meme_number = self.eng.get_random_number(len(self.video_memes)-1)
 

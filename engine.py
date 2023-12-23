@@ -18,6 +18,9 @@ class Engine:
         return this_time
     
     def get_weather(self, city : str):
+        """
+        Gets weather from the website
+        """
         google_page = requests.get(WEATHER_LINK.format(city=city))
         soup = BeautifulSoup(google_page.text, "html.parser")
 
@@ -29,6 +32,9 @@ class Engine:
             return 'There is nothing we can do.'
     
     def get_currency(self, currency):
+        """
+        Gets courses of dollar and euro in grivnas
+        """
         if currency == DOLLAR:
             page = requests.get(DOLLAR_LINK)
         elif currency == EURO:
@@ -46,6 +52,9 @@ class Engine:
             return 'There is nothing we can do.'
         
     def get_file_names(self, path):
+        """
+        Gets files' names from a folder
+        """
         return os.listdir(path=path)
 
     def get_headers(self, link : str) -> list:
