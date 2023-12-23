@@ -3,26 +3,27 @@ TOKEN = ''
 
 ### MESSAGES ###
 WILLKOMMEN_MESSAGE = "Привет, сладкий. С чем ты к нам? Смеху хочешь или узнать чего?"
-UNKNOWN_MESSAGE = 'Дядя, я эту команду не знаю:'
-TAKE_FROG_MESSAGE = 'Держи жабу.'
-STOP_TIMER_MESSAGE = "Пора на Донбасс!"
-WRONG_COMMAND_MESSAGE = "Неправильное написание комманды, переделуй!"
+# Hello, dear. Why are here? Do you want a joke or know smth
+UNKNOWN_MESSAGE = 'Дядя, я эту команду не знаю:' # Man, I don't know this command:
+TAKE_FROG_MESSAGE = 'Держи жабу.' # Take the frog
+STOP_TIMER_MESSAGE = "Пора на Донбасс!" # Time to Donbass
+WRONG_COMMAND_MESSAGE = "Неправильное написание комманды, переделуй!" # That's wrong, do it again
 
 ### BUTTON QUERY MESSAGES ###
 
-FROG_MESSAGE = "Дай ка жабу."
-MEME_MESSAGE = "Смеха хочется, мир наскучил."
-VIDEO_MEME_MESSAGE = "Дай видео глянуть. Настроение на нуле."
-WEATHER_MESSAGE = "Что у нас по погоде сегодня?"
-QUESTION_CITY_MESSAGE = "Выбери интересующий городок."
-ANSWER_WEATHER_MESSAGE = "Такова сейчас погода в городе {city}: {temp}."
-TIME_MESSAGE = "Каково сейчас время?"
-CURRENCY_MESSAGE = "Ну как там с деньгами?"
-DOLLAR = 'Ну как "какими", долларами!'
-EURO = 'Ну как "какими", евро!'
-CURRENCY_ANSWER_MESSAGE = "Тише-тише, деточка, вот курс:"
-QUESTION_MESSAGE = "Какими деньгами?"
-KEYBOARD_MESSAGE = "Вернемся же к начальной клавиатуре."
+FROG_MESSAGE = "Дай ка жабу." # Give me frog
+MEME_MESSAGE = "Смеха хочется, мир наскучил." # I want a joke, world is bored
+VIDEO_MEME_MESSAGE = "Дай видео глянуть. Настроение на нуле." # Let me watch a video, I have low mood
+WEATHER_MESSAGE = "Что у нас по погоде сегодня?" # What is the weather today?
+QUESTION_CITY_MESSAGE = "Выбери интересующий городок." # Choice the city
+ANSWER_WEATHER_MESSAGE = "Такова сейчас погода в городе {city}: {temp}." # Weather in ... is ... now
+TIME_MESSAGE = "Каково сейчас время?" # What is the time?
+CURRENCY_MESSAGE = "Ну как там с деньгами?" # What about money?
+DOLLAR = 'Ну как "какими", долларами!' # How "what", dollars!
+EURO = 'Ну как "какими", евро!' # How "what", euro!
+CURRENCY_ANSWER_MESSAGE = "Тише-тише, деточка, вот курс:" # Quiet-quiet, dear, here is course
+QUESTION_MESSAGE = "Какими деньгами?" # What money?
+KEYBOARD_MESSAGE = "Вернемся же к начальной клавиатуре." # Let's return to the start keyboard
 
 ### FORMATS ###
 HTML = 'html'
@@ -36,7 +37,6 @@ PHOTO_MODE = 'rb'
 ### PATHES ###
 MEME_PATH = './memes/'
 VIDEO_PATH = './videos/'
-CHROME_PATH = './chromedriver.exe'
 
 ### API QUERIES ###
 GOOGLE = 'https://google.com/search?'
@@ -58,4 +58,4 @@ CITIES = {"Киев" : "київ",                        "Харьков" : "х
           "Ивано-Франковск" : "івано-франківськ", "Каменец-Подольский" : "кам'янець-подільський",
           "Тернополь" : "тернопіль",              "Луцк" : "луцьк",
           "Ужгород" : "ужгород"}
-
+# This is the list of ukrainian cities
