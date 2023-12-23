@@ -11,15 +11,10 @@ class Engine:
     
     def __init__(self) -> None:
         self.regexer = RegexReader()
-
+    
     def get_time(self):
 
-        date = self.get_headers("https://www.google.com/")['Date']
-        return date
-    
-    def get_hour_minute(self):
-
-        this_time = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
+        this_time = f"Сейчас {datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
         return this_time
     
     def get_weather(self, city : str):
