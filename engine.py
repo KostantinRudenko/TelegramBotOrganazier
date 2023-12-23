@@ -2,18 +2,14 @@ import datetime
 import requests
 import os
 
-from requests import Session
 from config import *
 from random import randint
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from regex_reader import RegexReader
 
 class Engine:
     
     def __init__(self) -> None:
-        self.session = Session()
         self.regexer = RegexReader()
 
     def get_time(self):
@@ -27,24 +23,15 @@ class Engine:
         return this_time
     
     def get_weather(self, city : str):
-        params = {'q' : 'weather in {city}'.format(city=city)}
-        response = self.session.get(url=GOOGLE, params=params)
-        driver = webdriver.Chrome(executable_path=CHROME_PATH)
+        google_page = requests.get(WEATHER_LINK.format(city=city))
+        soup = BeautifulSoup(google_page.text, "html.parser")
 
-        driver.get(response.url)
-
-        temp= driver.find_element(By.XPATH, '//*[@id="wob_tm"]').text
-
-        wet = driver.find_element(By.XPATH, '//*[@id="wob_hm"]').text
-
-        rain =driver.find_element(By.XPATH, '//*[@id="wob_pp"]').text
-        
-        if temp and wet and rain:
-
-            result = f'{city}:\nТеспература: {temp}\nВлажность: {wet}\nОсадки: {rain}'
+        result = soup.find_all(name="p",
+                               attrs={"class" : "today-temp"})[0].get_text()
+        if result:
             return result
         else:
-            return f'No weather information found for {city}.'
+            return 'There is nothing we can do.'
     
     def get_currency(self, currency):
         if currency == DOLLAR:
@@ -69,10 +56,5 @@ class Engine:
     def get_headers(self, link : str) -> list:
 
         return requests.get(url=link).headers
-    
-    def get_content(self, link : str):
-
-        return requests.get(url=link).content
-
     def get_random_number(self, limit : int) -> int:
         return randint(0, limit)

@@ -17,7 +17,7 @@ class Bot:
         
         self.command_words = {FROG_MESSAGE: self.send_frog_func,
                               TIME_MESSAGE : self.send_time,
-                              WEATHER_MESSAGE : self.send_weather,
+                              WEATHER_MESSAGE : self.send_cities,
                               VIDEO_MEME_MESSAGE : self.video_meme,
                               MEME_MESSAGE : self.meme,
                               CURRENCY_MESSAGE : self.get_currency_course}
@@ -43,7 +43,6 @@ class Bot:
                     self.command_words[command](message)
                 except:
                     if message.text == CURRENCY_MESSAGE:
-                        self.remove_buttons(message=message)
                         self.get_currency_course()
 
                     elif message.text == DOLLAR:
@@ -60,6 +59,16 @@ class Bot:
                                     f"{CURRENCY_ANSWER_MESSAGE} {self.eng.get_currency(EURO)}",
                                     parse_mode=HTML)
                         self.send_main_buttons(message=message)
+                    
+                    elif message.text in CITIES.keys():
+                        for city in CITIES.keys():
+                            if message.text == city:
+                                self.bot.send_message(message.chat.id,
+                                                      ANSWER_WEATHER_MESSAGE.format(city=city,
+                                                                                    temp=self.eng.get_weather(city=CITIES[city])),
+                                                      parse_mode=HTML,
+                                                      )
+                                self.send_main_buttons(message=message)
 
     def welcome_func(self, message):
         
@@ -98,6 +107,18 @@ class Bot:
                               QUESTION_MESSAGE,
                               parse_mode=HTML,
                               reply_markup=markup)
+    
+    def send_cities(self, message):
+        markup = types.ReplyKeyboardMarkup(row_width=3)
+
+        for city in CITIES:
+            button = types.KeyboardButton(city)
+            markup.add(button)
+        
+        self.bot.send_message(message.chat.id,
+                              QUESTION_CITY_MESSAGE,
+                              reply_markup=markup,
+                              parse_mode=HTML)
 
     def send_frog_func(self, message):
         chat_id = message.chat.id
@@ -137,13 +158,6 @@ class Bot:
             
         except:
             pass
-        
-    def send_weather(self, message):
-        search_city = message.text.split()[1]
-        res = self.eng.get_weather(city=search_city)
-        self.bot.send_message(message.chat.id,
-                              res,
-                              parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
