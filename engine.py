@@ -1,5 +1,4 @@
 import datetime
-import time
 import requests
 import os
 
@@ -8,29 +7,24 @@ from config import *
 from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from bs4 import BeautifulSoup
+from regex_reader import RegexReader
 
 class Engine:
     
     def __init__(self) -> None:
         self.session = Session()
+        self.regexer = RegexReader()
 
     def get_time(self):
 
         date = self.get_headers("https://www.google.com/")['Date']
         return date
     
-    def get_hout_minute(self):
+    def get_hour_minute(self):
 
         this_time = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
         return this_time
-    
-    def start_timer(self, setted_time):
-        while True:
-            time_now = f"{datetime.datetime.now().hour}:{datetime.datetime.now().minute}"
-            if setted_time != time_now:
-                pass
-            else:
-                return STOP_TIMER_MESSAGE
     
     def get_weather(self, city : str):
         params = {'q' : 'weather in {city}'.format(city=city)}
@@ -53,14 +47,19 @@ class Engine:
             return f'No weather information found for {city}.'
     
     def get_currency(self, currency):
-        params = {'q' : f'{currency}in grn'}
-        response = self.session.get(url=GOOGLE, params=params)
-        driver = webdriver.Chrome(executable_path=CHROME_PATH)
+        if currency == DOLLAR:
+            page = requests.get(DOLLAR_LINK)
+        elif currency == EURO:
+            page = requests.get(EURO_LINK)
+        
+        soup = BeautifulSoup(page.text, 'html.parser')
+        result = soup.find_all(name='div',
+                               attrs={"type" : "average",
+                                "class" : "sc-1x32wa2-9 bKmKjX"})[0].get_text()
 
-        driver.get(response.url)
-        reusult = driver.find_element(By.XPATH, '//*[@id="knowledge-currency__updatable-data-column"]/div[1]/div[2]/span[1]').text
-        if reusult:
-            return reusult
+        if result:
+            result = self.regexer.read_data(r"\d\d,\d\d", result)[0]
+            return result
         else:
             return 'There is nothing we can do.'
         

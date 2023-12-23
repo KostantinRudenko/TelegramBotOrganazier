@@ -9,20 +9,19 @@ class Bot:
         self.bot = telebot.TeleBot(TOKEN)
         self.eng = Engine()
         self.rgx = RegexReader()
-        self.memes = self.eng.get_file_names(MEME_PATH)
 
+        self.memes = self.eng.get_file_names(MEME_PATH)
         self.video_memes = self.eng.get_file_names(VIDEO_PATH)
         
-        self.command_handlers = {START : self.welcome_func,
-                                 SEND_FROG : self.send_frog_func,
-                                 GET_TIME : self.send_time,
-                                 START_TIME : self.set_timer,
-                                 WEATHER : self.send_weather,
-                                 VIDEO_MEME : self.video_meme,
-                                 MEME : self.meme,
-                                 COURSE : self.get_currency_course,
-                                 DOLLAR : self.get_dollar,
-                                 EURO : self.get_euro}
+        self.command_handlers = {START : self.welcome_func}
+        
+        self.command_words = {FROG_MESSAGE: self.send_frog_func,
+                              TIME_MESSAGE : self.send_time,
+                              WEATHER_MESSAGE : self.send_weather,
+                              VIDEO_MEME_MESSAGE : self.video_meme,
+                              MEME_MESSAGE : self.meme,
+                              CURRENCY_MESSAGE : self.get_currency_course}
+
         self.setup_handlers()
     '''
         Method setup_handlers is a function, 
@@ -31,18 +30,78 @@ class Bot:
     def setup_handlers(self):
         @self.bot.message_handler(func=lambda message: True)
         def handle_messages(message):
-            command = message.text.split()[0][1:]
-            if command in self.command_handlers:
-                self.command_handlers[command](message)
+            if message.text[0] == '/':
+                command = message.text.split()[0][1:]
+                if command in self.command_handlers:
+                    self.command_handlers[command](message)
+                else:
+                    self.bot.reply_to(message, f"{UNKNOWN_MESSAGE} {command}")
+
             else:
-                self.bot.reply_to(message, f"{UNKNOWN_MESSAGE} {command}")
+                try:
+                    command = message.text
+                    self.command_words[command](message)
+                except:
+                    if message.text == CURRENCY_MESSAGE:
+                        self.remove_buttons(message=message)
+                        self.get_currency_course()
+
+                    elif message.text == DOLLAR:
+                        self.bot.send_message(
+                                    message.chat.id,
+                                    f"{CURRENCY_ANSWER_MESSAGE} {self.eng.get_currency(DOLLAR)}",
+                                    parse_mode=HTML
+                                    )
+                        self.send_main_buttons(message=message)
+                    
+                    elif message.text == EURO:
+                        self.bot.send_message(
+                                    message.chat.id,
+                                    f"{CURRENCY_ANSWER_MESSAGE} {self.eng.get_currency(EURO)}",
+                                    parse_mode=HTML)
+                        self.send_main_buttons(message=message)
 
     def welcome_func(self, message):
-        self.bot.reply_to(message, WILLKOMMEN_MESSAGE)
+        
+        self.bot.send_message(message.chat.id,
+                              WILLKOMMEN_MESSAGE,
+                              parse_mode=HTML)
+        self.send_main_buttons(message=message)
+    
+    def send_main_buttons(self, message):
+
+        markup = types.ReplyKeyboardMarkup(row_width=2)
+        meme_button = types.KeyboardButton(MEME_MESSAGE)
+        video_meme_button = types.KeyboardButton(VIDEO_MEME_MESSAGE)
+        weather_button = types.KeyboardButton(WEATHER_MESSAGE)
+        time_button = types.KeyboardButton(TIME_MESSAGE)
+        currency_button = types.KeyboardButton(CURRENCY_MESSAGE)
+        take_frog_button = types.KeyboardButton(FROG_MESSAGE)
+
+        markup.add(meme_button, video_meme_button, take_frog_button,
+                   currency_button, weather_button, time_button)        
+        
+        self.bot.send_message(message.chat.id,
+                              KEYBOARD_MESSAGE,
+                              reply_markup=markup,
+                              parse_mode=HTML)
+    
+    def get_currency_course(self, message):
+
+        markup = types.ReplyKeyboardMarkup(row_width=2)
+        dollar_button = types.KeyboardButton(DOLLAR)
+        euro_button = types.KeyboardButton(EURO)
+
+        markup.add(dollar_button, euro_button)
+
+        self.bot.send_message(message.chat.id,
+                              QUESTION_MESSAGE,
+                              parse_mode=HTML,
+                              reply_markup=markup)
 
     def send_frog_func(self, message):
         chat_id = message.chat.id
-        photo = open(MEME_PATH+self.memes[0], PHOTO_MODE)
+        photo = open(MEME_PATH+self.memes[self.memes.index('frog.jpg')], PHOTO_MODE)
         self.bot.reply_to(message, TAKE_FROG_MESSAGE)
         self.bot.send_photo(chat_id = chat_id, 
                             photo=photo)
@@ -51,19 +110,6 @@ class Bot:
         self.bot.send_message(message.chat.id,
                               self.eng.get_time(),
                               parse_mode=HTML)
-    
-    def set_timer(self, message) -> str:
-        user_message = message.text.split()
-        try:
-            setted_time = user_message[1]
-            while True:
-                if self.eng.get_hout_minute() == setted_time:
-                    break
-            self.bot.send_message(message.chat.id,
-                                  STOP_TIMER_MESSAGE,
-                                  parse_mode=HTML)
-        except IndexError:
-            self.bot.reply_to(message, WRONG_COMMAND_MESSAGE)
     
     def meme(self, message):
         chat_id = message.chat.id
@@ -98,43 +144,6 @@ class Bot:
         self.bot.send_message(message.chat.id,
                               res,
                               parse_mode=HTML)
-
-    def get_currency_course(self, message):
-        markup = types.ReplyKeyboardMarkup(row_width=2, selective=False)
-        
-        dollar_btn = types.KeyboardButton('/'+DOLLAR)
-        euro_btn = types.KeyboardButton('/'+EURO)
-        
-        markup.add(dollar_btn, euro_btn)
-        self.bot.send_message(message.chat.id, "Выберите валюту:", reply_markup=markup)
-        '''
-        while True:
-            if message.text == DOLLAR:
-                res = self.eng.get_currency(DOLLAR)
-                self.bot.send_message(message.chat.id,
-                                    res,
-                                    parse_mode=HTML)
-                break
-            
-            elif message.text == EURO:
-                res = self.eng.get_currency(EURO)
-                self.bot.send_message(message.chat.id,
-                                    res,
-                                    parse_mode=HTML)
-                break
-            # сделай так, что б выбор был /get_dollar /get_euro и при этом срабатовала функция
-        '''
-    def get_dollar(self, message):
-        res = self.eng.get_currency(DOLLAR)
-        self.bot.send_message(message.chat.id,
-                            res + "grn",
-                            parse_mode=HTML)
-    
-    def get_euro(self, message):
-        res = self.eng.get_currency(EURO)
-        self.bot.send_message(message.chat.id,
-                            res,
-                            parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
