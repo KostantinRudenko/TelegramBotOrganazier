@@ -46,7 +46,7 @@ class Engine:
                                 "class" : "sc-1x32wa2-9 bKmKjX"})[0].get_text()
 
         if result:
-            result = self.regexer.read_data(r"\d\d,\d\d", result)[0]
+            result = self.regexer.read_data(TIME, result)[0]
             return result
         else:
             return 'There is nothing we can do.'

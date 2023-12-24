@@ -13,7 +13,8 @@ class RegexReader:
         Returns a list of the founded results
     '''
     def read_data(self, pattern, text) -> list:
-        return re.findall(pattern, text)
+        result = re.findall(pattern, text)
+        return result
     
     '''
         Function tries to find any specific

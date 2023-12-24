@@ -24,6 +24,9 @@ EURO = 'Ну как "какими", евро!' # How "what", euro!
 CURRENCY_ANSWER_MESSAGE = "Тише-тише, деточка, вот курс:" # Quiet-quiet, dear, here is course
 QUESTION_MESSAGE = "Какими деньгами?" # What money?
 KEYBOARD_MESSAGE = "Вернемся же к начальной клавиатуре." # Let's return to the start keyboard
+BOGDAN_MESSAGE = "Пиши правильно или к тебе придет дядя Богдан." # Write correctly or Uncle Bogdan will come to you.
+MESSAGE_MESSAGE = "Хочу отправить сообщение." # I want to send a message.
+MESSAGE_ANSWER_MESSAGE = "Хорошо, дорогой. Тогда я объясняю.\nЕсли тебе нужно отправить сообщение человеку, то вот шаблон:\nuser_id message\nВместо user_id пишешь id пользователя, message - сообщение.\nТолько адресат должен пользоватся мной. Иначе ... к тебе придет Богдан.\nТы можешь не знать как найти id человека. Смотри документацию."
 
 ### FORMATS ###
 HTML = 'html'
@@ -43,6 +46,7 @@ GOOGLE = 'https://google.com/search?'
 WEATHER_LINK = "https://ua.sinoptik.ua/погода-{city}"
 DOLLAR_LINK = "https://minfin.com.ua/ua/currency/usd/"
 EURO_LINK  =  'https://minfin.com.ua/ua/currency/eur/'
+TELEGRAM_LINK = f"https://api.telegram.org/bot${TOKEN}/sendMessage"
 
 ### CITIES ###
 CITIES = {"Киев" : "київ",                        "Харьков" : "харків",
@@ -59,3 +63,8 @@ CITIES = {"Киев" : "київ",                        "Харьков" : "х
           "Тернополь" : "тернопіль",              "Луцк" : "луцьк",
           "Ужгород" : "ужгород"}
 # This is the list of ukrainian cities
+
+### REGEX ###
+TIME = r"\d\d,\d\d"
+USER_MESSAGE = r"(@[\d\w]+\s.+|-[\d\w]+\s.+|[\d\w]+\s.+)"
+USERNAME = r"(@[\d\w]+|-[\d\w]+|[\d\w]+)"

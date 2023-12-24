@@ -4,6 +4,7 @@ from config import *
 from regex_reader import *
 from engine import *
 from telebot import types
+import requests
 class Bot:
     def __init__(self):
         self.bot = telebot.TeleBot(TOKEN)
@@ -82,6 +83,20 @@ class Bot:
                                                       )
                                 self.send_main_buttons(message=message)
 
+                    elif message.text == MESSAGE_MESSAGE:
+                        self.bot.send_message(message.chat.id,
+                                              MESSAGE_ANSWER_MESSAGE,
+                                              parse_mode=HTML)
+
+                    elif self.rgx.read_data(pattern=USER_MESSAGE, text=message.text):
+                        messages = self.rgx.read_data(pattern=USER_MESSAGE, text=message.text)
+                        for text in messages:
+                            userid = self.rgx.read_data(pattern=USERNAME, text=message.text)[0]
+                            text = message.text.replace(userid, '', 1)
+                            self.send_message_to_user(message,
+                                                        userid=userid,
+                                                        text=text)
+
     def welcome_func(self, message):
         
         """
@@ -104,9 +119,10 @@ class Bot:
         time_button = types.KeyboardButton(TIME_MESSAGE)
         currency_button = types.KeyboardButton(CURRENCY_MESSAGE)
         take_frog_button = types.KeyboardButton(FROG_MESSAGE)
+        message_button = types.KeyboardButton(MESSAGE_MESSAGE)
 
         markup.add(meme_button, video_meme_button, take_frog_button,
-                   currency_button, weather_button, time_button)        
+                   currency_button, weather_button, time_button, message_button)        
         
         self.bot.send_message(message.chat.id,
                               KEYBOARD_MESSAGE,
@@ -194,6 +210,22 @@ class Bot:
             
         except:
             pass
+    
+    def send_message_to_user(self, message, userid, text):
+        try:
+            params = {'chat_id' : userid,
+                      'text'    : text}
+            url = requests.post(TELEGRAM_LINK, params=params)
+        except:
+            bogdan = open(MEME_PATH+self.memes[self.memes.index("bogdan.jpg")], PHOTO_MODE)
+            
+            self.bot.send_message(message.chat.id,
+                                  BOGDAN_MESSAGE,
+                                  parse_mode=HTML)
+            
+            self.bot.send_photo(message.chat.id,
+                                    bogdan,
+                                    parse_mode=HTML)
 
     def start_polling(self):
         self.bot.polling(none_stop = True)
