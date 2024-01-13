@@ -1,8 +1,6 @@
 import re
 
 class RegexReader:
-    def __init__(self):
-        pass
     
     '''
         Function reads ALL data from the text message
